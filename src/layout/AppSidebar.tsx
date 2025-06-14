@@ -8,16 +8,11 @@ import {
   BoxCubeIcon,
   CalenderIcon,
   ChevronDownIcon,
-  FolderIcon,
   GridIcon,
   HorizontaLDots,
   ListIcon,
   PageIcon,
   DocsIcon,
-  PieChartIcon,
-  PlugInIcon,
-  TableIcon,
-  UserCircleIcon,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 import SidebarWidget from "./SidebarWidget";

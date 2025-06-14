@@ -46,7 +46,7 @@ export default function VerifyEmailForm() {
           return;
         }
         try {
-          const response = await axios.post(`${backendUrl}/verify-email`, { email: userData.email, otp });
+           await axios.post(`${backendUrl}/verify-email`, { email: userData.email, otp });
       
           toast.success("Email verified successfully");
           navigate("/");

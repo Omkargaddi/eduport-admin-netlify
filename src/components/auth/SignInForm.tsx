@@ -15,7 +15,7 @@ export default function SignInForm() {
     const navigate = useNavigate();
     const [isLoading , setIsLoading] = useState(false);
 
-    const { backendUrl, setIsLoggedIn, getUserData  , setUserData, isLoggedIn } = useContext(AppContext);
+    const { backendUrl, setIsLoggedIn, getUserData  , setUserData } = useContext(AppContext);
 
 
 const onSubmitHandler = async (e: React.FormEvent) => {
