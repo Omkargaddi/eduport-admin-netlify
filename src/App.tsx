@@ -36,10 +36,8 @@ import PageList from "./content/category/PageList";
 import CourseBuys from "./content/course/CourseBuys";
 
 export default function App() {
-    const ctx = useContext(AppContext);
+  const { isLoggedIn } = useContext(AppContext);
 
-  const {  userData } = ctx;
- 
   return (
     <>
       <ToastContainer
@@ -70,7 +68,7 @@ export default function App() {
           <Route path="/verify-email" element={<VerifyEmail />} />
 
           {/* Protected Routes */}
-          {userData ? (
+          {isLoggedIn ? (
             <Route element={<AppLayout />}>
               <Route path="/profile" element={<UserProfiles />} />
               <Route path="/calendar" element={<Calendar />} />
