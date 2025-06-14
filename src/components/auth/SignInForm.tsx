@@ -15,50 +15,47 @@ export default function SignInForm() {
     const navigate = useNavigate();
     const [isLoading , setIsLoading] = useState(false);
 
-    const { backendUrl, setIsLoggedIn, getUserData  , setUserData } = useContext(AppContext);
+    const { backendUrl, setIsLoggedIn, getUserData , userData , setUserData } = useContext(AppContext);
 
 
-const onSubmitHandler = async (e: React.FormEvent) => {
-    e.preventDefault();
-    axios.defaults.withCredentials = true;
-
-    if (!email.trim()) {
-      toast.error("Email empty");
-      return;
-    }
-    if (!password.trim()) {
-      toast.error("Password empty");
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      // 🔹 Login API call (sends cookie)
-      await axios.post(`${backendUrl}/login`, { email, password });
-
-  
-      setIsLoggedIn(true);
-      // 🔹 Fetch profile (cookie + token header)
-      const profile = await getUserData();
-      if (profile) {
-        setUserData(profile);
-        console.log("Fetched profile:", profile);
-        navigate("/");
-      } else {
-        toast.error("Could not fetch user profile after login.");
-        return;
-      }
-          toast.success("Signin successful");
-    } catch (error: any) {
-      let errorMessage = "Something went wrong. Please try again.";
-      if (axios.isAxiosError(error) && error.response) {
-        errorMessage = error.response.data || errorMessage;
-      }
-      toast.error(errorMessage);
-    } finally {
-      setIsLoading(false);
-    }
+const onSubmitHandler = async (e: { preventDefault: () => void; }) => {
+  e.preventDefault();
+  axios.defaults.withCredentials = true;
+  if(email===""){
+    toast.error("Email empty");
+    return;
   }
+  if(password===""){
+    toast.error("Password empty");
+    return;
+  }
+  setIsLoading(true);
+  try {
+      // 🔹 Login API call
+      const response = await axios.post(`${backendUrl}/login`, {
+        email,
+        password,
+      });
+      console.log(response);
+      toast.success("Signin successful");
+      setIsLoggedIn(true);
+      const data = await getUserData();
+      setUserData(data);
+      console.log(data);
+      navigate("/");
+  } catch (error) {
+    let errorMessage = "Something went wrong. Please try again.";
+    if (axios.isAxiosError(error) && error.response) {
+      errorMessage = error.response.data || errorMessage;
+    }
+    toast.error(errorMessage);
+  } finally {
+    setIsLoading(false);
+    console.log(userData);
+  }
+};
+
+
 
   return (
     <div className="flex flex-col flex-1">
