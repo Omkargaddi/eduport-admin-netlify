@@ -45,6 +45,7 @@ const SectionList = () => {
         `${backendUrl}/categories/${categoryId}/sections`,
         {
           headers: { "X-Creator-Id": userData.id },
+          withCredentials: true,
         }
       );
       setList(res.data);

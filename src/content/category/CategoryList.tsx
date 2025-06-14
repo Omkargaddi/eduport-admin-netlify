@@ -35,6 +35,7 @@ const CategoryList = () => {
   };
  
   const removeCategory = async (categoryId: any) => {
+    axios.defaults.withCredentials = true;
     try {
       const res = await axios.delete(`${backendUrl}/categories/${categoryId}`, {
         headers: { "X-Creator-Id": userData.id },

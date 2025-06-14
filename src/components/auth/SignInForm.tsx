@@ -31,12 +31,10 @@ const onSubmitHandler = async (e: { preventDefault: () => void; }) => {
   }
   setIsLoading(true);
   try {
-      // 🔹 Login API call
-      const response = await axios.post(`${backendUrl}/login`, {
+       await axios.post(`${backendUrl}/login`, {
         email,
         password,
       });
-      console.log(response);
       toast.success("Signin successful");
       setIsLoggedIn(true);
       const data = await getUserData();

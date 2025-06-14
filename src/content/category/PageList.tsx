@@ -64,6 +64,7 @@ const PageList = () => {
         `${backendUrl}/categories/${categoryId}/sections/${sectionId}/pages`,
         {
           headers: { "X-Creator-Id": userData.id },
+          withCredentials: true,
         }
       );
       setList(res.data);

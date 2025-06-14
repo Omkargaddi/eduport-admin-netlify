@@ -12,7 +12,6 @@ export default function UserMetaCard() {
   const { isOpen, openModal, closeModal } = useModal();
   const { userData, backendUrl, setUserData } = useContext(AppContext);
 
-  // Call all hooks at the top, unconditionally
   const [editablefName, setEditablefName] = useState(
     userData?.username?.split(" ")[0] || ""
   );
@@ -28,7 +27,6 @@ export default function UserMetaCard() {
   const [profileFile, setProfileFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Conditional rendering AFTER hooks
   if (!userData) {
     return <div>Loading user data...</div>;
   }
@@ -70,19 +68,18 @@ export default function UserMetaCard() {
       if (profileFile) {
         formData.append("file", profileFile);
       } else {
-        formData.append("file", new Blob([])); // empty file fallback
+        formData.append("file", new Blob([])); 
       }
-
       const response = await axios.post(
         `${backendUrl}/profile-edit`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true,
         }
       );
 
       const result = response.data;
-      console.log(result);
       setUserData({
         ...userData,
         username: result.username,

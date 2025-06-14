@@ -46,8 +46,11 @@ export default function VerifyEmailForm() {
           return;
         }
         try {
-           await axios.post(`${backendUrl}/verify-email`, { email: userData.email, otp });
-      
+          await axios.post(
+            `${backendUrl}/verify-email`,
+            { email: userData.email, otp },
+            { withCredentials: true }
+          );
           toast.success("Email verified successfully");
           navigate("/");
           const data = await getUserData();
@@ -68,12 +71,17 @@ export default function VerifyEmailForm() {
       // Resend OTP
       const handleResend = async () => {
         setIsLoading2(true);
-      if(userData.authenticated) {
-        toast.error("Admin already registred");
-        navigate('/');
-      }
         try {
-          await axios.post(`${backendUrl}/verify-email-otp`, { email: userData.email });
+          if(userData.authenticated) {
+            toast.error("Admin already registred");
+            navigate('/');
+            return;
+          }
+          await axios.post(
+            `${backendUrl}/verify-email-otp`,
+            { email: userData.email },
+            { withCredentials: true }
+          );
           toast.success("OTP resent successfully");
         } catch (error) {
           toast.error("Failed to resend OTP");

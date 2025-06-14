@@ -47,7 +47,7 @@ const getUserData = async (): Promise<any | null> => {
       toast.error("Session expired. Please login again.");
     }
   }
-  return null;  // <— always return something
+  return null; 
 };
 
 

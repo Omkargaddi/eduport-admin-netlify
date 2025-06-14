@@ -51,13 +51,13 @@ export default function CategoryAdd() {
  
        formData.append("request", categoryBlob);
        formData.append("file", image);
- 
-       const response = await axios.post(`${backendUrl}/categories`, formData, {
-         headers: {
-           "Content-Type": "multipart/form-data",
-           "X-Creator-Id": userData.id,
-         },
-       });
+const response = await axios.post(`${backendUrl}/categories`, formData, {
+  headers: {
+    "Content-Type": "multipart/form-data",
+    "X-Creator-Id": userData.id,
+  },
+  withCredentials: true,
+});
        if (response.status === 200) {
          toast.success("Category added successfully.");
        }
