@@ -7,16 +7,7 @@ import {
 import { toast } from "react-toastify";
 import axios from "axios";
 
-interface ProfileResponse {
-  // Define the expected user profile fields here, for example:
-  id: string;
-  name: string;
-  email: string;
-  // Add more fields as needed
-}
-
 interface AppContextType {
-   loading: boolean;
   isLoggedIn: boolean;
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
   userData: any;
@@ -26,7 +17,6 @@ interface AppContextType {
 }
 
 export const AppContext = createContext<AppContextType>({
-   loading: true,
   isLoggedIn: false,
   setIsLoggedIn: () => {},
   userData: null,
@@ -38,47 +28,40 @@ export const AppContext = createContext<AppContextType>({
 export const AppContextProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
-  const backendUrl = 'https://eduport-backend-production.up.railway.app/admin';
-    const [loading, setLoading] = useState(true);
+  const backendUrl = 'http://localhost:8080/admin';
 
-
-    
-const getUserData = async (): Promise<ProfileResponse | null> => {
-  setLoading(true);
-
-  try {
-    const response = await axios.get(`${backendUrl}/profile`, {
-      withCredentials: true
-    });
-
-    if (response.status === 200) {
-      setUserData(response.data);
-      setIsLoggedIn(true);
-      return response.data;
-    } else {
+  const getUserData = async () => {
+   
+    try {
+      const response = await axios.get(`${backendUrl}/profile`, {
+        withCredentials: true,
+      });
+      if (response.status === 200) {
+        setUserData(response.data);
+        setIsLoggedIn(true);
+        console.log(response.data);
+        return response.data;
+      } else {
+        setIsLoggedIn(false);
+        console.log("Failed to fetch user data")
+      }
+    } catch (error: any) {
       setIsLoggedIn(false);
-      return null;
+      if (error.response?.status === 401) {
+        toast.error("Session expired. Please login again.");
+      } else {
+        if(isLoggedIn){
+          toast.error(error?.message || "An unknown error occurred");
+        }
+      }
     }
-  } catch (error: any) {
-    setIsLoggedIn(false);
-    if (error.response?.status === 401) {
-      toast.error("Session expired. Please login again.");
-    } else if (isLoggedIn) {
-      toast.error(error.message || "An unknown error occurred");
-    }
-    return null;
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
- useEffect(() => {
+  useEffect(() => {
     getUserData();
-  
-}, []);
+  }, []);
 
   const contextValue: AppContextType = {
-    loading,
     isLoggedIn,
     setIsLoggedIn,
     userData,
