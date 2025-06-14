@@ -25,37 +25,31 @@ export const AppContext = createContext<AppContextType>({
   getUserData: async () => null,
 });
 
+
 export const AppContextProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
   const backendUrl = 'https://eduport-backend-production.up.railway.app/admin';
 
-  const getUserData = async () => {
-   
-    try {
-      const response = await axios.get(`${backendUrl}/profile`, {
-        withCredentials: true,
-      });
-      if (response.status === 200) {
-        setUserData(response.data);
-        setIsLoggedIn(true);
-        console.log(response.data);
-        return response.data;
-      } else {
-        setIsLoggedIn(false);
-        console.log("Failed to fetch user data")
-      }
-    } catch (error: any) {
-      setIsLoggedIn(false);
-      if (error.response?.status === 401) {
-        toast.error("Session expired. Please login again.");
-      } else {
-        if(isLoggedIn){
-          toast.error(error?.message || "An unknown error occurred");
-        }
-      }
+const getUserData = async (): Promise<any | null> => {
+  try {
+    const response = await axios.get(`${backendUrl}/profile`, {
+      withCredentials: true,
+    });
+    if (response.status === 200) {
+      setUserData(response.data);
+      setIsLoggedIn(true);
+      return response.data;
     }
-  };
+  } catch (err: any) {
+    setIsLoggedIn(false);
+    if (err.response?.status === 401) {
+      toast.error("Session expired. Please login again.");
+    }
+  }
+  return null;  // <— always return something
+};
+
 
   useEffect(() => {
     getUserData();
