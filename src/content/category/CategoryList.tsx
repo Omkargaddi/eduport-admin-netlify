@@ -15,6 +15,7 @@ type Category = {
   creatorId: string;
   creator: string;
   creatorProfileUrl: string;
+  createdAt: string; // Added to match CategoryItem
 };
 
 const CategoryList = () => {
@@ -130,7 +131,7 @@ useEffect(() => {
 
       {/* Content */}
       <p className="text-gray-700 leading-relaxed pt-3">
-        A category can only be deleted by the administrator who originally created it. Additionally, it must be empty—containing no sections or content—before it can be removed, ensuring that no dependent data is lost.
+        A category can only be deleted by the creator who originally created it. Additionally, it must be empty—containing no sections or content—before it can be removed, ensuring that no dependent data is lost.
       </p>
     </div>
   </div>

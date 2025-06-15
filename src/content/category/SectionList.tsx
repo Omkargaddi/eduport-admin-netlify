@@ -20,6 +20,7 @@ type Section = {
   creatorId: string;
   creator: string;
   creatorProfileUrl: string;
+  createdAt: string;
 };
 
 const SectionList = () => {
@@ -187,7 +188,7 @@ const updateSection = async (id: string | number, updatedData: any) => {
 
       {/* Content */}
       <p className="text-gray-700 leading-relaxed pt-3">
-       A section can only be deleted if it contains no tutorial pages, ensuring that no associated content is unintentionally lost. Additionally, only the administrator who originally created the section has the permission to delete it, maintaining proper ownership and control.
+       A section can only be deleted if it contains no tutorial pages, ensuring that no associated content is unintentionally lost. Additionally, only the creator who originally created the section has the permission to delete it, maintaining proper ownership and control.
       </p>
     </div>
   </div>

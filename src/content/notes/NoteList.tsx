@@ -51,7 +51,7 @@ const  NoteList = () => {
     try {
       const success = await deleteNote(courseId);
       if (success) {
-        toast.success("Course removed.");
+        toast.success("Notes removed.");
         await fetchList();
       } else {
         toast.error("Error occurred while removing the notes.");

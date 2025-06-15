@@ -7,6 +7,9 @@ import Label from "../../components/form/Label";
 import Input from "../../components/form/input/InputField";
 import { AppContext } from "../../context/AppContext";
 import { Editor } from "@tinymce/tinymce-react";
+import DOMPurify from 'dompurify';
+
+
 
 type PageItem = {
   id: string;
@@ -16,6 +19,7 @@ type PageItem = {
   creatorId: string;
   creator: string;
   creatorProfileUrl: string;
+  createdAt: string;
 };
 
 type CourseCardProps = {
@@ -80,12 +84,27 @@ const PageCard = ({ item, deletePage, updatePage }: CourseCardProps) => {
     return () => observer.disconnect();
   }, []);
 
+
+
+  
+  const sanitizedContent = DOMPurify.sanitize(item.content || '');
+
   return (
     <>
       <div className="rounded-2xl bg-white p-6 shadow-md dark:bg-gray-800 dark:text-white">
         <div className="flex flex-col lg:flex-row gap-6 items-start">
           <div className="flex-1">
             <h3 className="text-xl font-semibold">{item.title}</h3>
+            <div style={{display:"flex", alignItems:"center", gap:"7px", margin:"8px 0px" }}>
+              <h5>Created by: </h5>
+            <img src={item.creatorProfileUrl} alt="..." style={{width:"25px",height:"25px",borderRadius:"50%"}} />
+            <p className="text-gray-600" style={{fontStyle:"italic"}}>{item.creator}</p>
+            </div>
+            <div style={{display:"flex", alignItems:"center", gap:"7px", margin:"8px 0px" }}>
+              <h5>Created at:</h5>
+            
+            <p className="text-gray-600" style={{fontStyle:"italic"}}>{item.createdAt}</p>
+            </div>
           </div>
           <div className="flex flex-row gap-2 ">
             {item.creatorId === userData.id && (
@@ -183,8 +202,8 @@ const PageCard = ({ item, deletePage, updatePage }: CourseCardProps) => {
                <Editor
   apiKey="3oyp9f595polavb3h023w1v7rg0n39ddxri8apm96yr8dh1r"
   value={editData.content}
-  onEditorChange={(value) =>
-    setEditData((prev) => ({ ...prev, content: value }))
+  onEditorChange={(newContent) =>
+    setEditData((prev) => ({ ...prev, content: newContent }))
   }
   init={{
     height: 500,
@@ -192,30 +211,17 @@ const PageCard = ({ item, deletePage, updatePage }: CourseCardProps) => {
     skin: isDarkMode ? "oxide-dark" : "oxide",
     content_css: isDarkMode ? "dark" : "default",
     plugins: [
-      "advlist",
-      "autolink",
-      "lists",
-      "link",
-      "image",
-      "charmap",
-      "preview",
-      "anchor",
-      "searchreplace",
-      "visualblocks",
-      "code",
-      "fullscreen",
-      "insertdatetime",
-      "media",
-      "table",
-      "help",
-      "wordcount",
-    ],
+      "advlist autolink lists link image charmap preview anchor",
+      "searchreplace visualblocks fullscreen insertdatetime media table",
+      "help wordcount codesample code",
+    ].join(" "),
     toolbar:
-      "undo redo | blocks | " +
-      "bold italic underline strikethrough forecolor backcolor | alignleft aligncenter " +
-      "alignright alignjustify | bullist numlist outdent indent | " +
-      "removeformat | link image media | preview code fullscreen | help",
+      "undo redo | formatselect | bold italic underline strikethrough | " +
+      "alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | " +
+      "removeformat | link image media | preview fullscreen | " +
+      "codesample code | help",
     content_style: `
+      @import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism${isDarkMode ? "-okaidia" : ""}.min.css');
       body {
         font-family: Inter, Helvetica, Arial, sans-serif;
         font-size: 16px;
@@ -224,6 +230,18 @@ const PageCard = ({ item, deletePage, updatePage }: CourseCardProps) => {
         color: ${isDarkMode ? "white" : "black"};
       }
     `,
+    codesample_languages: [
+      { text: "HTML/XML", value: "markup" },
+      { text: "JavaScript", value: "javascript" },
+      { text: "TypeScript", value: "typescript" },
+      { text: "CSS", value: "css" },
+      { text: "Python", value: "python" },
+      { text: "Java", value: "java" },
+      { text: "C", value: "c" },
+      { text: "C++", value: "cpp" },
+      { text: "Ruby", value: "ruby" },
+      { text: "Go", value: "go" },
+    ],
   }}
 />
 
@@ -263,11 +281,13 @@ const PageCard = ({ item, deletePage, updatePage }: CourseCardProps) => {
                 <h5 className="text-lg font-medium text-gray-700 dark:text-white mb-2">
                   Content
                 </h5>
-                <div
-                  className="prose dark:prose-invert max-w-none"
-                  dangerouslySetInnerHTML={{ __html: item.content }}
-                />
-              </div>
+                {/* Render the TinyMCE HTML content */}
+        <div
+          className="blog-card-content"
+          dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+        />
+      </div>
+              
             </div>
 
             <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">

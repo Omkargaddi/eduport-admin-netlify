@@ -7,6 +7,7 @@ import Label from "../../components/form/Label";
 import Input from "../../components/form/input/InputField";
 import TextArea from "../../components/form/input/TextArea";
 import { Editor } from "@tinymce/tinymce-react";
+import DOMPurify from 'dompurify';
 
 type BlogItem = {
   id: string;
@@ -108,6 +109,9 @@ const BlogCard = ({ item, removeBlog, updateBlog }: CourseCardProps) => {
   
       return () => observer.disconnect();
     }, []);
+
+
+      const sanitizedContent = DOMPurify.sanitize(item.content || '');
 
   
   return (
@@ -218,11 +222,12 @@ const BlogCard = ({ item, removeBlog, updateBlog }: CourseCardProps) => {
       <h5 className="text-lg font-medium text-gray-700 dark:text-white mb-2">
         Content
       </h5>
-      <div
-        className="prose dark:prose-invert max-w-none"
-        dangerouslySetInnerHTML={{ __html: item.content }}
-      />
-    </div>
+       {/* Render the TinyMCE HTML content */}
+        <div
+          className="blog-card-content"
+          dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+        />
+      </div>
               {/* Tags */}
               <div>
                 <h5 className="text-lg font-medium text-gray-700 dark:text-white">
@@ -345,43 +350,29 @@ const BlogCard = ({ item, removeBlog, updateBlog }: CourseCardProps) => {
             
                   <div>
               <Label className="form-label">Content</Label>
-
-              <Editor
-                apiKey="3oyp9f595polavb3h023w1v7rg0n39ddxri8apm96yr8dh1r"
-                value={item.content}
+<Editor
+  apiKey="3oyp9f595polavb3h023w1v7rg0n39ddxri8apm96yr8dh1r"
+  value={item.content}
                 onEditorChange={(newContent) =>
                   setEditData((prev) => ({ ...prev, content: newContent })) 
                 }
-                init={{
-                  height: 500,
-                  menubar: true,
-                  skin: isDarkMode ? "oxide-dark" : "oxide",
-                  content_css: isDarkMode ? "dark" : "default",
-                  plugins: [
-                    "advlist",
-                    "autolink",
-                    "lists",
-                    "link",
-                    "image",
-                    "charmap",
-                    "preview",
-                    "anchor",
-                    "searchreplace",
-                    "visualblocks",
-                    "code",
-                    "fullscreen",
-                    "insertdatetime",
-                    "media",
-                    "table",
-                    "help",
-                    "wordcount",
-                  ],
-                  toolbar:
-                    "undo redo | blocks | " +
-                    "bold italic underline strikethrough forecolor backcolor | alignleft aligncenter " +
-                    "alignright alignjustify | bullist numlist outdent indent | " +
-                    "removeformat | link image media | preview code fullscreen | help",
-                  content_style: `
+  init={{
+    height: 500,
+    menubar: true,
+    skin: isDarkMode ? "oxide-dark" : "oxide",
+    content_css: isDarkMode ? "dark" : "default",
+    plugins: [
+      "advlist autolink lists link image charmap preview anchor",
+      "searchreplace visualblocks fullscreen insertdatetime media table",
+      "help wordcount codesample code",
+    ].join(" "),
+    toolbar:
+      "undo redo | formatselect | bold italic underline strikethrough | " +
+      "alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | " +
+      "removeformat | link image media | preview fullscreen | " +
+      "codesample code | help",
+    content_style: `
+      @import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism${isDarkMode ? "-okaidia" : ""}.min.css');
       body {
         font-family: Inter, Helvetica, Arial, sans-serif;
         font-size: 16px;
@@ -390,8 +381,21 @@ const BlogCard = ({ item, removeBlog, updateBlog }: CourseCardProps) => {
         color: ${isDarkMode ? "white" : "black"};
       }
     `,
-                }}
-              />
+    codesample_languages: [
+      { text: "HTML/XML", value: "markup" },
+      { text: "JavaScript", value: "javascript" },
+      { text: "TypeScript", value: "typescript" },
+      { text: "CSS", value: "css" },
+      { text: "Python", value: "python" },
+      { text: "Java", value: "java" },
+      { text: "C", value: "c" },
+      { text: "C++", value: "cpp" },
+      { text: "Ruby", value: "ruby" },
+      { text: "Go", value: "go" },
+    ],
+  }}
+/>
+
             </div>
               
 <div>

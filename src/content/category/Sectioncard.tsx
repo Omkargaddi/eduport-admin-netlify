@@ -15,6 +15,7 @@ type SetionItem = {
   creatorId: string;
   creator: string;
   creatorProfileUrl: string;
+  createdAt: string;
 };
 
 type CourseCardProps = {
@@ -69,6 +70,16 @@ const SectionCard = ({
         <div className="flex flex-col lg:flex-row gap-6 items-start">
           <div className="flex-1">
             <h3 className="text-xl font-semibold">{item.title}</h3>
+            <div style={{display:"flex", alignItems:"center", gap:"7px", margin:"8px 0px" }}>
+              <h5>Created by: </h5>
+            <img src={item.creatorProfileUrl} alt="..." style={{width:"25px",height:"25px",borderRadius:"50%"}} />
+            <p className="text-gray-600" style={{fontStyle:"italic"}}>{item.creator}</p>
+            </div>
+            <div style={{display:"flex", alignItems:"center", gap:"7px", margin:"8px 0px" }}>
+              <h5>Created at:</h5>
+            
+            <p className="text-gray-600" style={{fontStyle:"italic"}}>{item.createdAt}</p>
+            </div>
           </div>
           <div className="flex flex-row gap-2 ">
             {item.creatorId === userData.id && (

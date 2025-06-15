@@ -23,6 +23,7 @@ type Page = {
   creatorId: string;
   creator: string;
   creatorProfileUrl: string;
+  createdAt: string;
 };
 
 const PageList = () => {
@@ -83,10 +84,10 @@ const PageList = () => {
           headers: { "X-Creator-Id": userData.id },
         }
       );
-      toast.success("Section deleted.");
+      toast.success("Page deleted.");
       fetchList();
     } catch (err) {
-      toast.error("Could not delete section.");
+      toast.error("Could not delete page.");
       console.error(err);
     }
   };
@@ -205,7 +206,7 @@ const updatePage = async (id: string | number, updatedData: any) => {
 
       {/* Content */}
       <p className="text-gray-700 leading-relaxed pt-3">
-       To maintain content integrity and accountability, only the administrator who originally created a tutorial page is authorized to delete it. This restriction ensures that only the responsible content author can remove their own material.
+       To maintain content integrity and accountability, only the creator who originally created a tutorial page is authorized to delete it. This restriction ensures that only the responsible content author can remove their own material.
       </p>
     </div>
   </div>
@@ -255,42 +256,29 @@ const updatePage = async (id: string | number, updatedData: any) => {
               <div>
               <Label className="form-label">Content</Label>
 
-              <Editor
-                apiKey="3oyp9f595polavb3h023w1v7rg0n39ddxri8apm96yr8dh1r"
-                value={addContent}
-                onEditorChange={(newContent) =>
+               <Editor
+  apiKey="3oyp9f595polavb3h023w1v7rg0n39ddxri8apm96yr8dh1r"
+  value={addContent}
+  onEditorChange={(newContent) =>
                   setAddContent(newContent)
                 }
-                init={{
-                  height: 500,
-                  menubar: true,
-                  skin: isDarkMode ? "oxide-dark" : "oxide",
-                  content_css: isDarkMode ? "dark" : "default",
-                  plugins: [
-                    "advlist",
-                    "autolink",
-                    "lists",
-                    "link",
-                    "image",
-                    "charmap",
-                    "preview",
-                    "anchor",
-                    "searchreplace",
-                    "visualblocks",
-                    "code",
-                    "fullscreen",
-                    "insertdatetime",
-                    "media",
-                    "table",
-                    "help",
-                    "wordcount",
-                  ],
-                  toolbar:
-                    "undo redo | blocks | " +
-                    "bold italic underline strikethrough forecolor backcolor | alignleft aligncenter " +
-                    "alignright alignjustify | bullist numlist outdent indent | " +
-                    "removeformat | link image media | preview code fullscreen | help",
-                  content_style: `
+  init={{
+    height: 500,
+    menubar: true,
+    skin: isDarkMode ? "oxide-dark" : "oxide",
+    content_css: isDarkMode ? "dark" : "default",
+    plugins: [
+      "advlist autolink lists link image charmap preview anchor",
+      "searchreplace visualblocks fullscreen insertdatetime media table",
+      "help wordcount codesample code",
+    ].join(" "),
+    toolbar:
+      "undo redo | formatselect | bold italic underline strikethrough | " +
+      "alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | " +
+      "removeformat | link image media | preview fullscreen | " +
+      "codesample code | help",
+    content_style: `
+      @import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism${isDarkMode ? "-okaidia" : ""}.min.css');
       body {
         font-family: Inter, Helvetica, Arial, sans-serif;
         font-size: 16px;
@@ -299,8 +287,20 @@ const updatePage = async (id: string | number, updatedData: any) => {
         color: ${isDarkMode ? "white" : "black"};
       }
     `,
-                }}
-              />
+    codesample_languages: [
+      { text: "HTML/XML", value: "markup" },
+      { text: "JavaScript", value: "javascript" },
+      { text: "TypeScript", value: "typescript" },
+      { text: "CSS", value: "css" },
+      { text: "Python", value: "python" },
+      { text: "Java", value: "java" },
+      { text: "C", value: "c" },
+      { text: "C++", value: "cpp" },
+      { text: "Ruby", value: "ruby" },
+      { text: "Go", value: "go" },
+    ],
+  }}
+/>
             </div>
             </div>
 

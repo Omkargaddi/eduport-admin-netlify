@@ -6,6 +6,8 @@
 
 
 
+
+
 @layer base {
   body {
     @apply relative text-base font-normal z-1 bg-gray-50 font-outfit;
