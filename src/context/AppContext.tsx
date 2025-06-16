@@ -29,7 +29,7 @@ export const AppContext = createContext<AppContextType>({
 export const AppContextProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
-  const backendUrl = 'https://eduport-backend-production.up.railway.app/admin';
+  const backendUrl = 'http://eduport-backend-production.up.railway.app/admin';
 
 const getUserData = async (): Promise<any | null> => {
   try {

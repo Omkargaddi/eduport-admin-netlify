@@ -45,43 +45,31 @@ export default function BasicTableOne() {
       }
     }, [userData]);
   return (
-    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
-      <div className="max-w-full overflow-x-auto">
+  <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+    <div className="max-w-full overflow-x-auto">
+      {list.length === 0 ? (
+        <div className="p-6 text-center text-gray-600 dark:text-gray-300">
+          No purchases of any courses created by you.
+        </div>
+      ) : (
         <div className="min-w-[1102px]">
           <Table>
             {/* Table Header */}
             <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
               <TableRow>
-                
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                >
+                <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                   User
                 </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                >
-                 Date
+                <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                  Date
                 </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                >
+                <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                   Course
                 </TableCell>
-                
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                >
+                <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                   Status
                 </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                >
+                <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                   Amount
                 </TableCell>
               </TableRow>
@@ -91,14 +79,13 @@ export default function BasicTableOne() {
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {list.map((order) => (
                 <TableRow key={order.id}>
-                  
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 overflow-hidden rounded-full">
                         <img
                           width={40}
                           height={40}
-                          src={order.userImageUrl ? order.userImageUrl : "https://eduport-wda-project.s3.eu-north-1.amazonaws.com/defaultUser.webp"}
+                          src={order.userImageUrl || "https://eduport-wda-project.s3.eu-north-1.amazonaws.com/defaultUser.webp"}
                           alt={order.userName}
                         />
                       </div>
@@ -117,28 +104,19 @@ export default function BasicTableOne() {
                   </TableCell>
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
-                      
-                        <img
-                          width={40}
-                          height={40}
-                          src={order.courseImageUrl}
-                          alt={order.courseName}
-                        />
-                        <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                          {order.courseName}
-                        </span>
-                      
+                      <img
+                        width={40}
+                        height={40}
+                        src={order.courseImageUrl}
+                        alt={order.courseName}
+                      />
+                      <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                        {order.courseName}
+                      </span>
                     </div>
                   </TableCell>
-                  
-                
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <Badge
-                      size="sm"
-                      color={"success"}
-                    >
-                      success
-                    </Badge>
+                    <Badge size="sm" color="success">success</Badge>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                     {order.amount}
@@ -148,7 +126,8 @@ export default function BasicTableOne() {
             </TableBody>
           </Table>
         </div>
-      </div>
+      )}
     </div>
-  );
+  </div>
+);
 }
